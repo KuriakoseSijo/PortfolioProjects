@@ -1,0 +1,41 @@
+-- Tableau Project
+--Table 1
+Select SUM(new_cases::INT) as total_cases, SUM(new_deaths:: int) as total_deaths, SUM(new_deaths :: int)/ SUM(New_Cases::float)*100 as DeathPercentage
+From CovidDeaths
+--Where location like '%states%'
+where continent is not null 
+--Group By date
+order by 1,2;
+
+-- 2. 
+
+-- We take these out as they are not inluded in the above queries and want to stay consistent
+-- European Union is part of Europe
+
+Select location_, SUM(new_deaths::INT ) as TotalDeathCount
+From CovidDeaths
+--Where location like '%states%'
+Where continent is null 
+and location_ not in ('World', 'European Union', 'International')
+Group by location_
+order by TotalDeathCount desc;
+
+
+
+-- 3.
+
+Select Location_, Population, MAX(total_cases::int) as HighestInfectionCount,  Max((total_cases::float/population::float))*100 as PercentPopulationInfected
+From CovidDeaths
+--Where location like '%states%'
+Group by Location_, Population
+order by PercentPopulationInfected desc
+
+
+--4
+
+Select Location_, Population,date::date, MAX(total_cases::int) as HighestInfectionCount,  Max((total_cases::float/population::float))*100 as PercentPopulationInfected
+From CovidDeaths
+--Where location like '%states%'
+Group by Location_, Population, date
+order by PercentPopulationInfected desc
+
